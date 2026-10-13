@@ -1,0 +1,123 @@
+{
+  "name": "Topic 5 Expressions",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        -16
+      ],
+      "id": "7d85ba19-825c-4139-8a58-39f8b2ac7112",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dbb2b464-a3a5-4b87-8c0a-c0a9544a05ef",
+              "name": "firstName",
+              "value": "alex",
+              "type": "string"
+            },
+            {
+              "id": "c730872c-3671-40cc-b789-c42360d40b15",
+              "name": "lastName",
+              "value": "smith",
+              "type": "string"
+            },
+            {
+              "id": "cadd3c2f-9415-42d9-be96-b5d2d0e40c00",
+              "name": "birthDate",
+              "value": "1998-04-12T10:15:30.000Z",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -32,
+        -16
+      ],
+      "id": "d220d578-ca0f-49a4-8cde-79f7dd1221b1",
+      "name": "Student Info"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2a85e7e9-3673-4d8e-886a-af49272bf7f7",
+              "name": "FULL NAME",
+              "value": "={{ ($json.firstName + ' ' + $json.lastName).toUpperCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "1105aab7-053e-48c5-b16b-1b3c74c05756",
+              "name": "=Type formattedBirthDate",
+              "value": "={{ DateTime.fromISO($json.birthDate).toFormat('MMMM dd, yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "8ea59c4e-31d7-4003-9e81-cd4a03bef172",
+              "name": "processedDate",
+              "value": "={{ $now.toFormat('yyyy-MM-dd') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        192,
+        -16
+      ],
+      "id": "d5991d56-39b7-48da-bfc4-c11281776060",
+      "name": "Format and Transform."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Student Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Student Info": {
+      "main": [
+        [
+          {
+            "node": "Format and Transform.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "d433146b-d5a7-461b-873c-544399d93e54",
+  "meta": {
+    "instanceId": "a03c7678428ef19ededbf912f16f7d5798ec7b9ab4c17f2a2def6a9e791e7215"
+  },
+  "nodeGroups": [],
+  "id": "w8nqyHsSmP3V1AWP",
+  "tags": []
+}
