@@ -1,0 +1,183 @@
+{
+  "name": "Topic 15 Split in Batches",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -16
+      ],
+      "id": "a83e03c5-eefd-4238-a4e3-5f183635f6d6",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51640a8f-0355-4f0b-91af-0035b59d4480",
+              "name": "url",
+              "value": "={{ $json.url }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        208,
+        -16
+      ],
+      "id": "a7d228a8-9384-4559-889c-0227c26b02e3",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        608,
+        144
+      ],
+      "id": "5ac57488-cd6c-47f0-bce9-673349b27dcc",
+      "name": "Fetch Details",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "batchSize": 2,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        432,
+        -16
+      ],
+      "id": "4250b563-36bf-41ff-919c-62ec35ddb889",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  { json: { url: \"https://jsonplaceholder.typicode.com/posts/1\" } },\n  { json: { url: \"https://jsonplaceholder.typicode.com/posts/1\" } },\n  { json: { url: \"https://invalid-url-domain-does-not-exist.xyz/\" } },\n  { json: { url: \"https://jsonplaceholder.typicode.com/posts/1\" } },\n  { json: { url: \"https://jsonplaceholder.typicode.com/posts/1\" } }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        -16
+      ],
+      "id": "4a79b1d9-e6a4-46bc-8ddb-cc9dc427fbd6",
+      "name": "Mock Items List"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "51c9afcd-2280-4ce8-99f0-5abede4b3cdf",
+              "name": "status",
+              "value": "All Batches Processed",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        656,
+        -112
+      ],
+      "id": "c8a1b53b-cca1-46e3-aaf2-919f29042341",
+      "name": "Compile Final List"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Mock Items List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Details": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Compile Final List",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fetch Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock Items List": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "5f4ed325-f57e-4bea-b583-dab62983f447",
+  "meta": {
+    "instanceId": "a03c7678428ef19ededbf912f16f7d5798ec7b9ab4c17f2a2def6a9e791e7215"
+  },
+  "nodeGroups": [],
+  "id": "zbgDxvaYEhAjFZRV",
+  "tags": []
+}
