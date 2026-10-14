@@ -1,0 +1,282 @@
+{
+  "name": "Topic 14 Switch Node",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        -16
+      ],
+      "id": "6cdb233e-37c4-4d80-ae21-bba3b18f6cb9",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "return [\n  {\n    json: {\n      username: \"Alice\",\n      role: \"admin\"\n    }\n  },\n  {\n    json: {\n      username: \"Bob\",\n      role: \"editor\"\n    }\n  },\n  {\n    json: {\n      username: \"Charlie\",\n      role: \"viewer\"\n    }\n  },\n  {\n    json: {\n      username: \"Dave\",\n      role: \"guest\"\n    }\n  }\n];\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        32,
+        -16
+      ],
+      "id": "fc732548-78e3-45d8-96d3-e6f04c62906c",
+      "name": "Mock Users"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.role }}",
+                    "rightValue": "=admin",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "c88c65ce-50e6-4b05-9290-145397c4d920"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "07c326c4-9db0-43ac-8546-a2ba2400acca",
+                    "leftValue": "={{ $json.role }}",
+                    "rightValue": "editor",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "0f1d7661-169a-48b2-9ee5-86c7abf43119",
+                    "leftValue": "={{ $json.role }}",
+                    "rightValue": "viewer",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Set Guest"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        -16
+      ],
+      "id": "3235339b-05cc-433a-b679-6ea42708a736",
+      "name": "Route by Role"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "aeee9df7-ea3d-461d-a99f-9aff4a33a365",
+              "name": "status",
+              "value": "Admin Access",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        464,
+        -208
+      ],
+      "id": "419359e2-71ad-430f-9f35-5b3303be11a6",
+      "name": "Set Admin"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6901fcdb-1c16-4147-8836-98d9e290854d",
+              "name": "Status",
+              "value": "Editor Access",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        528,
+        -64
+      ],
+      "id": "da41b7f4-73b7-43bc-a23a-9db92022ca54",
+      "name": "Set Editor."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "85ccda4a-1251-48ce-8ec9-2a57c325cdbb",
+              "name": "Status",
+              "value": "Viewer Access",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        544,
+        96
+      ],
+      "id": "085c563a-c883-4038-85d2-587940f513a8",
+      "name": "Set Viewer"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fd1a4a8d-a68e-4389-93b7-e44fef84198b",
+              "name": "Status",
+              "value": "Guest Access",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        512,
+        272
+      ],
+      "id": "69f290c1-cf6b-4f99-938a-39ba6a185281",
+      "name": "Set Guest."
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Mock Users",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock Users": {
+      "main": [
+        [
+          {
+            "node": "Route by Role",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Role": {
+      "main": [
+        [
+          {
+            "node": "Set Admin",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Editor.",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Viewer",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Guest.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "f9f2874b-7ab0-4a6d-8f22-d80edb01bac5",
+  "meta": {
+    "instanceId": "a03c7678428ef19ededbf912f16f7d5798ec7b9ab4c17f2a2def6a9e791e7215"
+  },
+  "nodeGroups": [],
+  "id": "a4Ysv5p9tTWZmlYm",
+  "tags": []
+}
